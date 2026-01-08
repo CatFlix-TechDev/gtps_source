@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="src\items\item.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base.h" />
@@ -175,11 +176,11 @@
     <ClInclude Include="enet\include\utility.h" />
     <ClInclude Include="enet\include\win32.h" />
     <ClInclude Include="Guilds.h" />
-    <ClInclude Include="Item.h" />
     <ClInclude Include="Packet.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="skStr.h" />
     <ClInclude Include="World.h" />
+    <ClInclude Include="src\items\item.h" />
     <ClInclude Include="src\role.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
