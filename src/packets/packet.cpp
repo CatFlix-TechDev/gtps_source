@@ -1,109 +1,120 @@
-#pragma once
+#include "packet.h"
+
+#include <cstdlib>
+#include <cstring>
+
+#include "../players/player.h"
+
+using namespace std;
+
+extern ENetHost* server;
+
 string bg_color = "", border_color = "";
-struct gamepacket_t
-{
-private:
-	int index = 0, len = 0;
-	bool isDialog = false;
-	BYTE* packet_data = new BYTE[61];
-public:
-	gamepacket_t(int delay = 0, int NetID = -1) {
-		len = 61;
-		int MessageType = 0x4, PacketType = 0x1, CharState = 0x8;
-		memset(packet_data, 0, 61);
-		memcpy(packet_data, &MessageType, 4);
-		memcpy(packet_data + 4, &PacketType, 4);
-		memcpy(packet_data + 8, &NetID, 4);
-		memcpy(packet_data + 16, &CharState, 4);
-		memcpy(packet_data + 24, &delay, 4);
-	};
-	~gamepacket_t() {
-		delete[] packet_data;
-	}
-	void Insert(string a) {
-		if (isDialog) a.append("\nset_border_color|" + border_color + "\nset_bg_color|" + bg_color + "|");
-		if (a == "OnDialogRequest") isDialog = true;
-		BYTE* data = new BYTE[len + 2 + a.length() + 4];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x2;
-		int str_len = (int)a.length();
-		memcpy(data + len + 2, &str_len, 4);
-		memcpy(data + len + 6, a.data(), str_len);
-		len = len + 2 + (int)a.length() + 4;
-		index++;
-		packet_data[60] = index;
-	}
-	void Insert(int a) {
-		BYTE* data = new BYTE[len + 2 + 4];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x9;
-		memcpy(data + len + 2, &a, 4);
-		len = len + 2 + 4;
-		index++;
-		packet_data[60] = index;
-	}
-	void Insert(unsigned int a) {
-		BYTE* data = new BYTE[len + 2 + 4];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x5;
-		memcpy(data + len + 2, &a, 4);
-		len = len + 2 + 4;
-		index++;
-		packet_data[60] = index;
-	}
-	void Insert(float a) {
-		BYTE* data = new BYTE[len + 2 + 4];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x1;
-		memcpy(data + len + 2, &a, 4);
-		len = len + 2 + 4;
-		index++;
-		packet_data[60] = index;
-	}
-	void Insert(float a, float b) {
-		BYTE* data = new BYTE[len + 2 + 8];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x3;
-		memcpy(data + len + 2, &a, 4);
-		memcpy(data + len + 6, &b, 4);
-		len = len + 2 + 8;
-		index++;
-		packet_data[60] = index;
-	}
-	void Insert(float a, float b, float c) {
-		BYTE* data = new BYTE[len + 2 + 12];
-		memcpy(data, packet_data, len);
-		delete[] packet_data;
-		packet_data = data;
-		data[len] = index;
-		data[len + 1] = 0x4;
-		memcpy(data + len + 2, &a, 4);
-		memcpy(data + len + 6, &b, 4);
-		memcpy(data + len + 10, &c, 4);
-		len = len + 2 + 12;
-		index++;
-		packet_data[60] = index;
-	}
-	void CreatePacket(ENetPeer* peer) {
-		ENetPacket* packet = enet_packet_create(packet_data, len, 1);
-		enet_peer_send(peer, 0, packet);
-	}
-};
+
+gamepacket_t::gamepacket_t(int delay, int NetID) {
+	len = 61;
+	int MessageType = 0x4, PacketType = 0x1, CharState = 0x8;
+	memset(packet_data, 0, 61);
+	memcpy(packet_data, &MessageType, 4);
+	memcpy(packet_data + 4, &PacketType, 4);
+	memcpy(packet_data + 8, &NetID, 4);
+	memcpy(packet_data + 16, &CharState, 4);
+	memcpy(packet_data + 24, &delay, 4);
+}
+
+gamepacket_t::~gamepacket_t() {
+	delete[] packet_data;
+}
+
+void gamepacket_t::Insert(string a) {
+	if (isDialog) a.append("\nset_border_color|" + border_color + "\nset_bg_color|" + bg_color + "|");
+	if (a == "OnDialogRequest") isDialog = true;
+	BYTE* data = new BYTE[len + 2 + a.length() + 4];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x2;
+	int str_len = (int)a.length();
+	memcpy(data + len + 2, &str_len, 4);
+	memcpy(data + len + 6, a.data(), str_len);
+	len = len + 2 + (int)a.length() + 4;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::Insert(int a) {
+	BYTE* data = new BYTE[len + 2 + 4];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x9;
+	memcpy(data + len + 2, &a, 4);
+	len = len + 2 + 4;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::Insert(unsigned int a) {
+	BYTE* data = new BYTE[len + 2 + 4];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x5;
+	memcpy(data + len + 2, &a, 4);
+	len = len + 2 + 4;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::Insert(float a) {
+	BYTE* data = new BYTE[len + 2 + 4];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x1;
+	memcpy(data + len + 2, &a, 4);
+	len = len + 2 + 4;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::Insert(float a, float b) {
+	BYTE* data = new BYTE[len + 2 + 8];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x3;
+	memcpy(data + len + 2, &a, 4);
+	memcpy(data + len + 6, &b, 4);
+	len = len + 2 + 8;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::Insert(float a, float b, float c) {
+	BYTE* data = new BYTE[len + 2 + 12];
+	memcpy(data, packet_data, len);
+	delete[] packet_data;
+	packet_data = data;
+	data[len] = index;
+	data[len + 1] = 0x4;
+	memcpy(data + len + 2, &a, 4);
+	memcpy(data + len + 6, &b, 4);
+	memcpy(data + len + 10, &c, 4);
+	len = len + 2 + 12;
+	index++;
+	packet_data[60] = index;
+}
+
+void gamepacket_t::CreatePacket(ENetPeer* peer) {
+	ENetPacket* packet = enet_packet_create(packet_data, len, 1);
+	enet_peer_send(peer, 0, packet);
+}
 
 PlayerMoving* unpackPlayerMoving(BYTE* data) {
 	PlayerMoving* dataStruct = new PlayerMoving;
@@ -119,6 +130,7 @@ PlayerMoving* unpackPlayerMoving(BYTE* data) {
 	memcpy(&dataStruct->punchY, data + 48, 4);
 	return dataStruct;
 }
+
 BYTE* get_struct(ENetPacket* packet) {
 	const unsigned int packetLenght = (unsigned int)packet->dataLength;
 	BYTE* result = nullptr;
@@ -137,8 +149,7 @@ BYTE* get_struct(ENetPacket* packet) {
 	return result;
 }
 
-void SendPacketRaw112(int a1, void* packetData, size_t packetDataSize, void* a4, ENetPeer* peer, int packetFlag)
-{
+void SendPacketRaw112(int a1, void* packetData, size_t packetDataSize, void* a4, ENetPeer* peer, int packetFlag) {
 	ENetPacket* p;
 
 	if (peer) // check if we have it setup
@@ -162,8 +173,8 @@ void SendPacketRaw112(int a1, void* packetData, size_t packetDataSize, void* a4,
 	}
 	delete (char*)packetData;
 }
-void SendPacketRaw1(int a1, void* packetData, size_t packetDataSize, void* a4, ENetPeer* peer, int packetFlag, int delay)
-{
+
+void SendPacketRaw1(int a1, void* packetData, size_t packetDataSize, void* a4, ENetPeer* peer, int packetFlag, int delay) {
 	ENetPacket* p;
 
 	if (peer) // check if we have it setup
@@ -194,6 +205,7 @@ void SendPacketRaw1(int a1, void* packetData, size_t packetDataSize, void* a4, E
 	}
 	delete (char*)packetData;
 }
+
 namespace variants {
 	void barrel(ENetPeer* peer, int netid, int x, int y, int delay) {
 		PlayerMoving data;
@@ -209,18 +221,21 @@ namespace variants {
 		data.punchY = 0;
 		SendPacketRaw1(4, packPlayerMoving(&data), 56, 0, peer, ENET_PACKET_FLAG_RELIABLE, delay);
 	}
+
 	void CrashTheGameClient(ENetPeer* peer) {
 		gamepacket_t p;
 		p.Insert("CrashTheGameClient");
 		p.CreatePacket(peer);
 	}
+
 	void OnRequestWorldSelectMenu(ENetPeer* peer, string output) {
 		gamepacket_t p;
 		p.Insert("OnRequestWorldSelectMenu");
 		p.Insert(output);
 		p.CreatePacket(peer);
 	}
-	void OnParticleEffect(ENetPeer* peer, float x, float y, int id, bool all = false, string name = "", int delay = 0) {
+
+	void OnParticleEffect(ENetPeer* peer, float x, float y, int id, bool all, string name, int delay) {
 		gamepacket_t p(delay);
 		p.Insert("OnParticleEffect");
 		p.Insert(id);
@@ -236,7 +251,8 @@ namespace variants {
 		}
 		else p.CreatePacket(peer);
 	}
-	void OnSetPos(ENetPeer* peer, int netID, float x, float y, int delay = 0) {
+
+	void OnSetPos(ENetPeer* peer, int netID, float x, float y, int delay) {
 		PlayerMoving data;
 		data.packetType = 0;
 		data.characterState = 0;
@@ -252,6 +268,7 @@ namespace variants {
 		p.Insert(x, y);
 		p.CreatePacket(peer);
 	}
+
 	void OnSendLog(ENetPeer* enetPeer, string text, int type)
 	{
 		if (enetPeer)
@@ -264,7 +281,8 @@ namespace variants {
 			}
 		}
 	}
-	void OnAddNotification(ENetPeer* peer, string text, string interfaces, string audio, int delay = 0) {
+
+	void OnAddNotification(ENetPeer* peer, string text, string interfaces, string audio, int delay) {
 		gamepacket_t p(delay);
 		p.Insert("OnAddNotification");
 		p.Insert(interfaces);
@@ -272,7 +290,8 @@ namespace variants {
 		p.Insert(audio);
 		p.CreatePacket(peer);
 	}
-	void OnTalkBubble(ENetPeer* peer, int netID, string text, int chatColor = 0, bool overlay = false, int delay = 0, bool overlay2 = false) {
+
+	void OnTalkBubble(ENetPeer* peer, int netID, string text, int chatColor, bool overlay, int delay, bool overlay2) {
 		gamepacket_t p(delay);
 		p.Insert("OnTalkBubble");
 		p.Insert(netID);
@@ -281,24 +300,28 @@ namespace variants {
 		p.Insert((overlay == true ? 1 : 0));
 		p.CreatePacket(peer);
 	}
-	void SetHasAccountSecured(ENetPeer* peer, bool secured = false) {
+
+	void SetHasAccountSecured(ENetPeer* peer, bool secured) {
 		gamepacket_t p(0);
 		p.Insert("SetHasAccountSecured");
 		p.Insert(secured ? 1 : 0);
 		p.CreatePacket(peer);
 	}
-	void OnDialogRequest(ENetPeer* peer, string text, int delay = 0) {
+
+	void OnDialogRequest(ENetPeer* peer, string text, int delay) {
 		gamepacket_t p(delay);
 		p.Insert("OnDialogRequest");
 		p.Insert("" + text);//last pos
 		p.CreatePacket(peer);
 	}
-	void OnTextOverlay(ENetPeer* peer, string text, int delay = 0) {
+
+	void OnTextOverlay(ENetPeer* peer, string text, int delay) {
 		gamepacket_t p(delay);
 		p.Insert("OnTextOverlay");
 		p.Insert(text);
 		p.CreatePacket(peer);
 	}
+
 	void OnSendPingRequest(ENetPeer* peer) {
 		int intdata = rand() % 100000;
 		PlayerMoving data;
@@ -306,6 +329,7 @@ namespace variants {
 		data.plantingTree = intdata;
 		SendPacketRaw112(4, packPlayerMoving(&data), 56, 0, peer, ENET_PACKET_FLAG_RELIABLE);
 	}
+
 	void OnSendPingReply(ENetPeer* peer, PlayerMoving* datas) {
 		int intdata = datas->plantingTree;
 		PlayerMoving data;
@@ -313,7 +337,8 @@ namespace variants {
 		data.plantingTree = intdata;
 		SendPacketRaw112(4, packPlayerMoving(&data), 56, 0, peer, ENET_PACKET_FLAG_RELIABLE);
 	}
-	void OnSpawn(ENetPeer* peer, string name, string country, int netID, int userID, float x, float y, int invis, int mstate, int smstate, bool local, int level = 1, int delay = 0) {
+
+	void OnSpawn(ENetPeer* peer, string name, string country, int netID, int userID, float x, float y, int invis, int mstate, int smstate, bool local, int level, int delay) {
 		gamepacket_t p(delay);
 		p.Insert("OnSpawn");
 		p.Insert(
@@ -330,20 +355,23 @@ namespace variants {
 			(local == true ? "\nonlineID|\ntype|local" : "\n"));
 		p.CreatePacket(peer);
 	}
+
 	void OnChangePureBeingMode(ENetPeer* peer, int netID, int mode) {
 		gamepacket_t p(0, netID);
 		p.Insert("OnChangePureBeingMode");
 		p.Insert(mode);
 		p.CreatePacket(peer);
 	}
-	void OnPlayPositioned(ENetPeer* peer, int netID, string file, int delay = 0)
+
+	void OnPlayPositioned(ENetPeer* peer, int netID, string file, int delay)
 	{
 		gamepacket_t p(delay, netID);
 		p.Insert("OnPlayPositioned");
 		p.Insert(file);
 		p.CreatePacket(peer);
 	}
-	void OnNameChanged(ENetPeer* peer, int netID, string name, bool all = false) {
+
+	void OnNameChanged(ENetPeer* peer, int netID, string name, bool all) {
 		gamepacket_t p(0, netID);
 		p.Insert("OnNameChanged");
 		p.Insert(name);
@@ -357,7 +385,8 @@ namespace variants {
 			}
 		}
 	}
-	void OnConsoleMessage(ENetPeer* peer, string text, bool all = false, int dly = 0) {
+
+	void OnConsoleMessage(ENetPeer* peer, string text, bool all, int dly) {
 		gamepacket_t p(dly);
 		p.Insert("OnConsoleMessage");
 		p.Insert("`o" + text);
@@ -369,9 +398,11 @@ namespace variants {
 			}
 		}
 	}
-	void OnPlaySound(ENetPeer* peer, string file, int delay = 0) {
+
+	void OnPlaySound(ENetPeer* peer, string file, int delay) {
 		variants::OnSendLog(peer, "action|play_sfx\nfile|" + file + "\ndelayMS|" + to_string(delay), 3);
 	}
+
 	void OnParticleEffect(ENetPeer* peer, int effect, int size, int netid, int x, int y, int delay) {
 		PlayerMoving data;
 		data.packetType = 17;

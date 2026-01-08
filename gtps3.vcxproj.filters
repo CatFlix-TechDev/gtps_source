@@ -20,6 +20,9 @@
     <ClCompile Include="src\players\player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\packets\packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enet\include\callbacks.h">
@@ -55,9 +58,6 @@
     <ClInclude Include="World.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Packet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Guilds.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -65,6 +65,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\items\item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\packets\packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\players\player.h">

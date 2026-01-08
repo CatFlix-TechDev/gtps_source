@@ -13,7 +13,7 @@ using namespace std;
 #include "src/items/item.h"
 #include "Base.h"
 #include "src/players/player.h"
-#include "Packet.h"
+#include "src/packets/packet.h"
 #include "Guilds.h"
 #include "skStr.h"
 #include "World.h"
