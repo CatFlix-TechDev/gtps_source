@@ -9,7 +9,7 @@
 #include "include/nlohmann/json.hpp"
 #include "include/proton/rtparam.hpp"
 #include "include/HTTPRequest.hpp"
-#include "Item.h"
+#include "src/items/Item.h"
 #include "Base.h"
 #include "Player.h"
 #include "Packet.h"
