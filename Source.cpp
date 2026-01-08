@@ -12,7 +12,7 @@ using namespace std;
 #include "include/HTTPRequest.hpp"
 #include "src/items/item.h"
 #include "Base.h"
-#include "Player.h"
+#include "src/players/player.h"
 #include "Packet.h"
 #include "Guilds.h"
 #include "skStr.h"

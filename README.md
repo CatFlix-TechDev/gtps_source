@@ -24,5 +24,5 @@ This repository contains a C++ Growtopia private server (GTPS) implementation th
 - `Source.cpp` — entry point and main server loop.
 - `World.h` — world state and persistence logic.
 - `Item.h` — item definitions and item-related helpers.
-- `Player.h` — player session structures.
+- `src/players/player.h` — player session structures.
 - `Packet.h` — network packet helpers.
