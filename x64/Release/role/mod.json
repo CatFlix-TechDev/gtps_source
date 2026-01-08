@@ -1,0 +1,16 @@
+{
+  "adminLevel": 2,
+  "role": "Mod",
+  "name": "`#@",
+  "prefix_chat": "`^",
+  "command": [
+    "help",
+    "hello"
+  ],
+  "access_world": true,
+  "long_punch_place": true,
+  "moderator_power": false,
+  "developer_power": false,
+  "logs_view": false,
+  "property_access": true
+}

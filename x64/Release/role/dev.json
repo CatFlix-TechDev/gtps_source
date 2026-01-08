@@ -1,0 +1,16 @@
+{
+  "adminLevel": 3,
+  "role": "Dev",
+  "name": "`6@",
+  "prefix_chat": "`5",
+  "command": [
+    "help",
+    "hello"
+  ],
+  "access_world": false,
+  "long_punch_place": false,
+  "moderator_power": false,
+  "developer_power": false,
+  "logs_view": false,
+  "property_access": false
+}

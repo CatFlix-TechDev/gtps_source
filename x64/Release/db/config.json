@@ -1,0 +1,13 @@
+{
+	"server_name": "`rRebirth-Ps",
+	"discord_url": "link?",
+	"web_url": "link?",
+	"port": 28028,
+	"bg_color": "72,167,11,180",
+	"border_color": "37,111,21,200",
+	"osm_link": "birthcdn.fun",
+	"osm_path": "cache/",
+	"ipv4": "169.197.142.116",
+	"secret_standopowah": false,
+	"deposit_world": "<NOT YET>"
+}
